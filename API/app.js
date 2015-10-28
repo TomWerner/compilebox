@@ -37,6 +37,12 @@ function random(size) {
     return require("crypto").randomBytes(size).toString('hex');
 }
 
+app.get('/languages', function(req, res) {
+    result = []
+    for (var i = 0; i < arr.compilerArray.length; i++)
+        result[i] = arr.compilerArray[i][3]
+    res.send({'languages': result});
+});
 
 app.post('/compile',bruteforce.prevent,function(req, res) 
 {
