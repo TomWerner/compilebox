@@ -8,5 +8,9 @@
   },
   "author": "Osman Ali",
   "license": "MIT",
-  "description": "Compilebox for HawkeyeChallenge"
+  "description": "Compilebox for HawkeyeChallenge",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/TomWerner/compilebox.git"
+  }
 }
