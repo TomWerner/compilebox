@@ -28,7 +28,7 @@ function random(size) {
     return require("crypto").randomBytes(size).toString('hex');
 }
 
-app.post('/compile', bruteforce.prevent, function (req, res) {
+app.post('/compile', function (req, res) {
 
     var language = req.body.language;
     var code = req.body.code;
