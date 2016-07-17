@@ -1,4 +1,4 @@
- {
+{
   "name": "API",
   "version": "1.0.0",
   "main": "app.js",
@@ -7,5 +7,6 @@
     "exports": "*"
   },
   "author": "Osman Ali",
-  "license": "MIT"
+  "license": "MIT",
+  "description": "Compilebox for HawkeyeChallenge"
 }
