@@ -78,6 +78,7 @@ def _build_compile_command(folder, language_index, path, timeout_value, vm_name)
     compiler_name = compilerArray[language_index][0]
     code_file = compilerArray[language_index][1]
     output_command = compilerArray[language_index][2]
+    print(compiler_name, code_file, output_command, path, folder, vm_name)
     command = path + 'DockerTimeout.sh ' + str(timeout_value) \
               + 's -u mysql -e \'NODE_PATH=/usr/local/lib/node_modules\' -i -t -v  "' \
               + path + folder + '":/usercode ' + vm_name \
