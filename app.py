@@ -94,12 +94,12 @@ def _prepare_data(code, folder, language_index, path, stdin):
     shutil.copy(path + 'Payload/javaRunner.sh', path + folder + '/javaRunner.sh')
     shutil.copy(path + 'Payload/script.sh', path + folder + '/script.sh')
     # Set the correct permissions on the folder
-    os.chmod(path + folder, 0o755)
+    os.chmod(path + folder, 0o777)
     # Write all the code to the file
     code_filename = compilerArray[language_index][1]
     with open(path + folder + '/' + code_filename, 'w') as f:
         f.write(code)
-    os.chmod(path + folder + '/' + code_filename, 0o755)
+    os.chmod(path + folder + '/' + code_filename, 0o777)
     with open(path + folder + '/inputFile', 'w') as f:
         f.write(stdin)
 
