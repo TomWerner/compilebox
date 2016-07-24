@@ -91,6 +91,10 @@ def evaluate_code(folder, path, vm_name, timeout_value, language_index, code, st
     else:
         error_message = 'Code execution timed out.'
         process.terminate()
+
+    # Clean up
+    os.removedirs(folder + path)
+
     return jsonify(errors=error_message, output=output_data, running_time=running_time)
 
 
@@ -131,17 +135,14 @@ def compile():
     code = json_data['code']
     stdin = json_data['stdin']
 
-    print(language_index, code, stdin)
-    return
+    # Create a cryptographically secure random folder name. This will be mounted/shared with Docker
+    folder = 'temp/' + b16encode(os.urandom(10)).decode('ascii')
+    path = os.path.dirname(os.path.abspath(__file__)) + '/API/'  # current working path
 
-    # # Create a cryptographically secure random folder name. This will be mounted/shared with Docker
-    # folder = 'temp/' + b16encode(os.urandom(10)).decode('ascii')
-    # path = os.path.dirname(os.path.abspath(__file__)) + '/API/'  # current working path
-    #
-    # # Tag of the docker machine we want to execute
-    # vm_name = 'virtual_machine'
-    # timeout_value = 20  # Timeout Value, In Seconds
-    #
-    # return evaluate_code(folder, path, vm_name, timeout_value, language_index, code, stdin)
+    # Tag of the docker machine we want to execute
+    vm_name = 'virtual_machine'
+    timeout_value = 20  # Timeout Value, In Seconds
 
-app.run(debug=True)
+    return evaluate_code(folder, path, vm_name, timeout_value, language_index, code, stdin)
+
+# app.run(debug=True)
