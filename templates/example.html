@@ -74,7 +74,7 @@
                 editor.setTheme('ace/theme/monokai');
                 editor.getSession().setMode(languageSelect.val());
                 editor.setOptions({maxLines: 40});
-                editor.setValue('name = input()\nprint("Hello, %s!" % name)');
+                editor.setValue('name = raw_input()\nprint("Hello, %s!" % name)');
 
                 if (editor.session.getLength() <= 20) {
                     var content = editor.getValue();
