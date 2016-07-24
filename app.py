@@ -1,7 +1,7 @@
 from subprocess import Popen
 
 import time
-from flask import Flask, jsonify
+from flask import Flask, jsonify, render_template
 from flask import request
 from base64 import b16encode
 import os
@@ -32,8 +32,13 @@ compilerArray = [
 ]
 
 
+@app.route('/')
+def demo():
+    return render_template('example.html')
+
+
 @app.route('/healthcheck')
-def index():
+def healthcheck():
     return 'alive'
 
 
@@ -86,6 +91,10 @@ def evaluate_code(folder, path, vm_name, timeout_value, language_index, code, st
     else:
         error_message = 'Code execution timed out.'
         process.terminate()
+
+    # Clean up
+    os.removedirs(folder + path)
+
     return jsonify(errors=error_message, output=output_data, running_time=running_time)
 
 
