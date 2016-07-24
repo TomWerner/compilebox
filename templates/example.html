@@ -52,7 +52,7 @@
                     data: JSON.stringify({
                         'language': languageIdLookup[languageSelect.val()],
                         'code': code,
-                        'stdin': 'TODO'
+                        'stdin': $('#stdin').val()
                     }),
                     success: function (e) {
                         submitButton.html('Submit');
