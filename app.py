@@ -37,6 +37,14 @@ def index():
     return 'alive'
 
 
+@app.route('/languages')
+def get_languages():
+    result = []
+    for i, language in enumerate(compilerArray):
+        result.append({'id': i, 'language': language[3]})
+    return jsonify(result)
+
+
 def read_all_lines(filename):
     with open(filename, 'r') as f:
         return ''.join(f.readlines())  # read lines leave \n at the end of each line, so don't join by it
