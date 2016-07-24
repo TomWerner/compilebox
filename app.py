@@ -78,7 +78,7 @@ def _build_compile_command(folder, language_index, path, timeout_value, vm_name)
     compiler_name = compilerArray[language_index][0]
     code_file = compilerArray[language_index][1]
     output_command = compilerArray[language_index][2]
-    command = path + 'DockerTimeout.sh ' + timeout_value \
+    command = path + 'DockerTimeout.sh ' + str(timeout_value) \
               + 's -u mysql -e \'NODE_PATH=/usr/local/lib/node_modules\' -i -t -v  "' \
               + path + folder + '":/usercode ' + vm_name \
               + ' /usercode/script.sh ' + compiler_name + ' ' + code_file + ' ' + output_command
@@ -90,7 +90,7 @@ def _prepare_data(code, folder, language_index, path, stdin):
     # Create the folder that will be shared with Docker
     os.mkdir(folder)
     # Copy over the scripts to do compilation and run everything
-    shutil.copy(path + 'Payload/', path + folder)
+    shutil.copytree(path + 'Payload/', path + folder)
     # Set the correct permissions on the folder
     os.chmod(path + folder, 0o755)
     # Write all the code to the file
@@ -110,7 +110,7 @@ def compile():
     stdin = json_data['stdin']
 
     # Create a cryptographically secure random folder name. This will be mounted/shared with Docker
-    folder = 'API/temp/' + b16encode(os.urandom(10)).decode('ascii')
+    folder = 'temp/' + b16encode(os.urandom(10)).decode('ascii')
     path = os.path.dirname(os.path.abspath(__file__)) + '/API/'  # current working path
 
     # Tag of the docker machine we want to execute
