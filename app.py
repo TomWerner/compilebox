@@ -91,7 +91,8 @@ def _prepare_data(code, folder, language_index, path, stdin):
     # Create the folder that will be shared with Docker
     os.mkdir(path + folder)
     # Copy over the scripts to do compilation and run everything
-    shutil.copytree(path + 'Payload/', path + folder + '/')
+    shutil.copy(path + 'Payload/javaRunner.sh', path + folder + '/javaRunner.sh')
+    shutil.copy(path + 'Payload/script.sh', path + folder + '/script.sh')
     # Set the correct permissions on the folder
     os.chmod(path + folder, 0o755)
     # Write all the code to the file
