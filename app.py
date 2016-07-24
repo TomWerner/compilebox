@@ -110,7 +110,7 @@ def compile():
     stdin = json_data['stdin']
 
     # Create a cryptographically secure random folder name. This will be mounted/shared with Docker
-    folder = 'temp/' + b16encode(os.urandom(10)).decode('ascii')
+    folder = 'API/temp/' + b16encode(os.urandom(10)).decode('ascii')
     path = os.path.dirname(os.path.abspath(__file__)) + '/API/'  # current working path
 
     # Tag of the docker machine we want to execute
@@ -119,3 +119,4 @@ def compile():
 
     return evaluate_code(folder, path, vm_name, timeout_value, language_index, code, stdin)
 
+# app.run(debug=True)
