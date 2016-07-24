@@ -16,6 +16,13 @@ app = Flask(__name__)
 # Use the fixer
 app.wsgi_app = ProxyFix(app.wsgi_app)
 
+
+# First column contains the compiler/interpretor that will be used for translation
+# Second column is the file name to use when storing the source code
+# Third column is optional, it contains the command to invoke the compiled program, it is used only for compilers
+# Fourth column is just the language name for display on console, for verbose error messages
+# Fifth column is optional, it contains additional arguments/flags for compilers
+# See https://github.com/remoteinterview/compilebox/blob/master/API/compilers.js for more examples
 compilerArray = [
     ['python', 'file.py', '', 'Python'],
     ['\'g++ -o /usercode/a.out\' ', 'file.cpp', '/usercode/a.out', 'C/C++'],
@@ -25,9 +32,9 @@ compilerArray = [
 ]
 
 
-@app.route('/')
+@app.route('/healthcheck')
 def index():
-    return 'Alive'
+    return 'alive'
 
 
 def read_all_lines(filename):

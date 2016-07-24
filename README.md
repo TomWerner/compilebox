@@ -1,55 +1,90 @@
 ## What is it? ##
-CompileBox is a *Docker* based sandbox to run untrusted code and return the output to your app. Users can submit their code in any of the supported languages. The system will test the code in an isolated environment. This way you do not have to worry about untrusted code possibly damaging your server intentionally or unintentionally.
+This is a modified version of the original CompileBox (https://github.com/remoteinterview/compilebox).
+This version of CompileBox uses Flask instead of NodeJS and includes instructions for deploying to EC2. This was
+specifically modified for use with the University of Iowa's high school Hawkeye Programming Challenge.
+Because the languages required are a subset of the original CompileBox, this version has been stripped down
+to include only Java, Python, C++/C, C#, and Visual Basic.
+
+## Why would you use it? ##
+CompileBox is a *Docker* based sandbox to run untrusted code and return the output to your app.
+Users can submit their code in any of the supported languages.
+The system will test the code in an isolated environment.
+This way you do not have to worry about untrusted code possibly damaging your server intentionally or unintentionally.
 You can use this system to allow your users to compile their code right in the browser.
 
-Check the example work at:
-
- - Basic Example: [compile.remoteinterview.io][1]
- - Prettified View: [codepad.remoteinterview.io][2]
-
 ## How does it work? ##
+A client will submit code in a given language with standard input to the API.
+The API then creates a new *Docker* container and runs the code using the compiler/interpreter of that language.
+The program runs inside a virtual machine with limited resources and has a time-limit for execution (20s by default).
+Once the output is ready it is sent back to the client-side app.
+The *Docker* container is destroyed and all the files are deleted from the server.
 
-The client-side app submits the code and the languageID to the server through the API. The API then creates a new *Docker* container and runs the code using the compiler/interpreter of that language. The program runs inside a virtual machine with limited resources and has a time-limit for execution (20s by default). Once the output is ready it is sent back to the client-side app. The *Docker* container is destroyed and all the files are deleted from the server.
-
-No two codes have access to each other’s *Docker* or files.
+No two submissions have access to each other's *Docker* instances or files.
 
 
-## Installation Instructions ##
+## Installation/Deployment Instructions ##
 
 * Go to the 'Setup' directory.
     - Open the Terminal as root user
     
-    - Execute the script **Install_*.sh**, select the file which best suites your Operating System description. This will install the Docker and NodeJs pre-requisites to your system and create an image called 'virtual_machine' inside the Docker. DockerVM may take around 20 to 30 minutes depending on your internet connection.
-    
-    - Once the Install script executes successfully, copy the folder named 'API' to your desired path.
-    
-    - Open app.js in the API folder and set the variable values as follows.
-    
-    	1. **timeout_value**: The time in seconds till which the API should wait for the output of the code before generating an "Execution Timed Out" message.
-        2. **port**: The port on which the server will listen, the default port is 80.
-        
-    - To test the installation, open a new terminal windows, cd to the API folder and type the following command
-	```
-    $ npm install .
-    ```
-	to install all needed nodejs modules, followed by
-	
-    ```
-    $ sudo nodejs app.js
-    ```
-    - If everything has been setup correctly in app.js file, you will see the following message on your terminal
-    ```
-    Listening at <port_number>
-    ```
+    - Execute the script **Install_*.sh**, select the file which best suites your Operating System description.
+    This will install the Docker and NodeJs pre-requisites to your system and create an image called
+    'virtual_machine' inside the Docker.
+    DockerVM may take around 20 to 30 minutes depending on your internet connection.
 
-    - Navigate your browser to http://127.0.0.1/
-    
-    ## Supported Operating Systems ##
-    The CompileBox API has been installed and run succesfully on the following platforms
-	- Ubuntu 12.04 LTS
-    - Ubuntu 13.10
-    - Ubuntu 14.04 LTS
-    - Linux Mint 15 
+    -  The CompileBox API has been installed and run successfully on the following platforms
+        - Ubuntu 12.04 LTS
+        - Ubuntu 13.10
+        - Ubuntu 14.04 LTS
+        - Linux Mint 15
+
+* Go to the project root directory
+    - Install pip (```sudo apt-get install python-pip python-dev build-essential``` on Ubuntu)
+
+    - Install the project requirements (```sudo pip install -r requirements.txt```)
+
+* Install Nginx
+    - ```sudo apt-get install nginx``` on Ubuntu
+
+    - Modify /etc/nginx/nginx.conf (Example)
+```
+worker_processes 1;
+
+events {
+
+    worker_connections 1024;
+
+}
+
+http {
+    # Configuration for Nginx
+    server {
+
+        # Running port
+        listen 80;
+
+        # Proxy connections to the application servers
+        # app_servers
+        location / {
+
+            proxy_pass         http://127.0.0.1:8000;
+            proxy_redirect     off;
+            proxy_set_header   Host $host;
+            proxy_set_header   X-Real-IP $remote_addr;
+            proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header   X-Forwarded-Host $server_name;
+
+        }
+    }
+}
+```
+
+* Start the API
+
+    - ```sudo gunicorn app:app -D```
+    This starts the app using gunicorn on 127.0.0.1:8000 (which nginx will re-route traffic to), and the -D
+    flag makes it run as a daemon, so it will continue running after closing your ssh connection on EC2.
+
     
 ## Selecting The languages for Installation Inside Docker ##
 
@@ -57,7 +92,9 @@ The default Dockerfile installs the most used languages. To remove/change any, f
 
 In order to select languages of your own choice you need to make 2 changes.<br>
     	1. <B>Dockerfile</B>: This file contains commands that you would normally give in your terminal to install that language. Add the required commands preceeded by the RUN keyword inside the Dockerfile. Run the "UpdateDocker.sh" script, present in the same folder if you are adding new language to already installed API, execute the Install_*.sh script otherwise, from your terminal after making the changes to your Dockerfile.<br>
-        2. <B>Compilers.js</B>: This file is inside the API folder. The compiler name, the source file name and the execution commands to Docker Container are taken from this file. This file only contains an array, which is described in detail inside the file. Add the credentials of the language you are adding to this array.<br>
+        2. <B>app.py</B>: This file contains a list of compilers, ```compilerArray```.
+        The compiler name, the source file name and the execution commands to Docker Container are taken from this file.
+        Add the credentials of the language you are adding to this array.<br>
         
 The next time you wish to compile using this language, simply issue the language_id , which is  same as the index of the language in the array present in Compilers.js, along with your code to the NodeJs server.
 
