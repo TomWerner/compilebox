@@ -57,8 +57,8 @@ def evaluate_code(folder, path, vm_name, timeout_value, language_index, code, st
     running_time = 0
     while time.time() - start_time < timeout_value and not completed:
         print('sleeping')
-        time.sleep(1000)
-        running_time += 1000
+        time.sleep(1)
+        running_time += 1
 
         # check to see if we're done
         if os.path.exists(output_data_filename):
