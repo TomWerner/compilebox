@@ -1,7 +1,7 @@
 from subprocess import Popen
 
 import time
-from flask import Flask, jsonify
+from flask import Flask, jsonify, render_template
 from flask import request
 from base64 import b16encode
 import os
@@ -32,8 +32,13 @@ compilerArray = [
 ]
 
 
+@app.route('/')
+def demo():
+    return render_template('example.html')
+
+
 @app.route('/healthcheck')
-def index():
+def healthcheck():
     return 'alive'
 
 
@@ -126,14 +131,17 @@ def compile():
     code = json_data['code']
     stdin = json_data['stdin']
 
-    # Create a cryptographically secure random folder name. This will be mounted/shared with Docker
-    folder = 'temp/' + b16encode(os.urandom(10)).decode('ascii')
-    path = os.path.dirname(os.path.abspath(__file__)) + '/API/'  # current working path
+    print(language_index, code, stdin)
+    return
 
-    # Tag of the docker machine we want to execute
-    vm_name = 'virtual_machine'
-    timeout_value = 20  # Timeout Value, In Seconds
+    # # Create a cryptographically secure random folder name. This will be mounted/shared with Docker
+    # folder = 'temp/' + b16encode(os.urandom(10)).decode('ascii')
+    # path = os.path.dirname(os.path.abspath(__file__)) + '/API/'  # current working path
+    #
+    # # Tag of the docker machine we want to execute
+    # vm_name = 'virtual_machine'
+    # timeout_value = 20  # Timeout Value, In Seconds
+    #
+    # return evaluate_code(folder, path, vm_name, timeout_value, language_index, code, stdin)
 
-    return evaluate_code(folder, path, vm_name, timeout_value, language_index, code, stdin)
-
-# app.run(debug=True)
+app.run(debug=True)
