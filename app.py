@@ -93,7 +93,7 @@ def evaluate_code(folder, path, vm_name, timeout_value, language_index, code, st
         process.terminate()
 
     # Clean up
-    os.removedirs(path + folder)
+    shutil.rmtree(path + folder)
 
     return jsonify(errors=error_message, output=output_data, running_time=running_time)
 
