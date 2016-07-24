@@ -32,7 +32,7 @@ def index():
 
 def read_all_lines(filename):
     with open(filename, 'r') as f:
-        return '\n'.join(f.readlines())
+        return ''.join(f.readlines())  # read lines leave \n at the end of each line, so don't join by it
 
 
 def extract_output_data(output_data_filename):
@@ -56,25 +56,20 @@ def evaluate_code(folder, path, vm_name, timeout_value, language_index, code, st
     output_data = ''
     running_time = 0
     while time.time() - start_time < timeout_value and not completed:
-        print('sleeping')
         time.sleep(1)
         running_time += 1
 
         # check to see if we're done
         if os.path.exists(output_data_filename):
-            print('completed!')
             completed = True
 
-    print('outside while loop')
     if completed:
         output_data, running_time = extract_output_data(output_data_filename)
         # check for any errors
         if os.path.exists(error_data_filename):
             error_message = read_all_lines(error_data_filename)
-            print('error file existed, content was:', error_message)
     else:
         error_message = 'Code execution timed out.'
-        print('timed out')
         process.terminate()
     return jsonify(errors=error_message, output=output_data, running_time=running_time)
 
