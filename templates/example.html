@@ -38,11 +38,22 @@
 
             var onSubmit = function () {
                 var code = editor.getValue().trim();
+                var languageIdLookup = {
+                    'ace/mode/java': 2,
+                    'ace/mode/python': 0,
+                    'ace/mode/vbscript': 3,
+                    'ace/mode/c_cpp': 1,
+                    'ace/mode/csharp': 4
+                };
 
                 $.ajax({
                     type: "POST",
                     url: '/compile',
-                    data: JSON.stringify({'language': languageSelect.val(), 'code': code, 'stdin': 'TODO'}),
+                    data: JSON.stringify({
+                        'language': languageIdLookup[languageSelect.val()],
+                        'code': code,
+                        'stdin': 'TODO'
+                    }),
                     success: function (e) {
                         submitButton.html('Submit');
                         $('#stdout').val(e['output']);
