@@ -28,7 +28,8 @@ compilerArray = [
     ['\'g++ -o /usercode/a.out\' ', 'file.cpp', '/usercode/a.out', 'C/C++'],
     ['javac', 'file.java', '\'./usercode/javaRunner.sh\'', 'Java'],
     ['\'vbnc -nologo -quiet\'', 'file.vb', '\'mono /usercode/file.exe\'', 'VB.Net'],
-    ['gmcs', 'file.cs', '\'mono /usercode/file.exe\'', 'C#']
+    ['gmcs', 'file.cs', '\'mono /usercode/file.exe\'', 'C#'],
+    ['python3', 'file.py', '', 'Python3']
 ]
 
 
