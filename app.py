@@ -25,7 +25,7 @@ app.wsgi_app = ProxyFix(app.wsgi_app)
 # See https://github.com/remoteinterview/compilebox/blob/master/API/compilers.js for more examples
 compilerArray = [
     ['python', 'file.py', '', 'Python'],
-    ['\'g++ -o /usercode/a.out\' ', 'file.cpp', '/usercode/a.out', 'C/C++'],
+    ['\'g++ -std=c++11 -o /usercode/a.out\' ', 'file.cpp', '/usercode/a.out', 'C/C++'],
     ['javac', 'file.java', '\'./usercode/javaRunner.sh\'', 'Java'],
     ['\'vbnc -nologo -quiet\'', 'file.vb', '\'mono /usercode/file.exe\'', 'VB.Net'],
     ['gmcs', 'file.cs', '\'mono /usercode/file.exe\'', 'C#'],
