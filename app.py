@@ -142,7 +142,7 @@ def compile():
 
     # Tag of the docker machine we want to execute
     vm_name = 'virtual_machine'
-    timeout_value = 20  # Timeout Value, In Seconds
+    timeout_value = 30  # Timeout Value, In Seconds
 
     return evaluate_code(folder, path, vm_name, timeout_value, language_index, code, stdin)
 
