@@ -29,7 +29,8 @@ compilerArray = [
     ['javac', 'file.java', '\'./usercode/javaRunner.sh\'', 'Java'],
     ['\'vbnc -nologo -quiet\'', 'file.vb', '\'mono /usercode/file.exe\'', 'VB.Net'],
     ['gmcs', 'file.cs', '\'mono /usercode/file.exe\'', 'C#'],
-    ['python3', 'file.py', '', 'Python3']
+    ['python3', 'file.py', '', 'Python3'],
+    ['nodejs', 'file.js', '', 'Nodejs'],
 ]
 
 
